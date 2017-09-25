@@ -1,4 +1,3 @@
-
 const agent = require('superagent-promise')(require('superagent'), Promise);
 const statusCode = require('http-status-codes');
 const chai = require('chai');
@@ -6,7 +5,6 @@ const chai = require('chai');
 const expect = chai.expect;
 
 describe('First Api Tests', () => {
-
     //Consume Service
     it('Consume GET Service', () => {
         return agent.get('https://httpbin.org/ip').then((response) => {
@@ -116,5 +114,4 @@ describe('First Api Tests', () => {
             expect(response.body.json).to.eql(body);
           });
     });
-
 });
