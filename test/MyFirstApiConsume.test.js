@@ -28,5 +28,21 @@ describe('First Api Tests', () => {
             expect(response.body.args).to.eql(query);
         });
     });
+
+    it('Consume POST Service', () => {
+        const body = {
+          name: 'John',
+          age: 31,
+          city: 'New York'
+        };
+     
+        return agent
+          .post('https://httpbin.org/post')
+          .send(body)
+          .then((response) => {
+            expect(response.status).to.equal(statusCode.OK);
+            expect(response.body.json).to.eql(body);
+          });
+      });
  
 });
