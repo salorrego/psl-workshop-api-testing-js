@@ -83,4 +83,21 @@ describe('First Api Tests', () => {
           });
     });
 
+    // Consume PUT service
+    it('Consume PUT Service', () => {
+        const body = {
+          name: 'John',
+          age: 31,
+          city: 'New York'
+        };
+     
+        return agent
+          .put('https://httpbin.org/put')
+          .send(body)
+          .then((response) => {
+            expect(response.status).to.equal(statusCode.OK);
+            expect(response.body.json).to.eql(body);
+          });
+    });
+
 });
