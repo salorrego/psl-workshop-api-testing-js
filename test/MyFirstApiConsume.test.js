@@ -66,4 +66,21 @@ describe('First Api Tests', () => {
           });
     });
 
+    // Consume PATCH service
+    it('Consume PATCH Service', () => {
+        const body = {
+          name: 'John',
+          age: 31,
+          city: 'New York'
+        };
+     
+        return agent
+          .patch('https://httpbin.org/patch')
+          .send(body)
+          .then((response) => {
+            expect(response.status).to.equal(statusCode.OK);
+            expect(response.body.json).to.eql(body);
+          });
+    });
+
 });
