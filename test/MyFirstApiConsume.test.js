@@ -13,5 +13,20 @@ describe('First Api Tests', () => {
           expect(response.body).to.have.property('origin');
         });
       });
+      
+    it('Consume GET Service with query parameters', () => {
+        const query = {
+        name: 'John',
+        age: '31',
+        city: 'New York'
+        };
+    
+        return agent.get('https://httpbin.org/get')
+        .query(query)
+        .then((response) => {
+            expect(response.status).to.equal(statusCode.OK);
+            expect(response.body.args).to.eql(query);
+        });
+    });
  
 });
