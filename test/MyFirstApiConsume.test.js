@@ -7,6 +7,7 @@ const expect = chai.expect;
 
 describe('First Api Tests', () => {
 
+    //Consume Service
     it('Consume GET Service', () => {
         return agent.get('https://httpbin.org/ip').then((response) => {
           expect(response.status).to.equal(statusCode.OK);
@@ -14,6 +15,7 @@ describe('First Api Tests', () => {
         });
       });
       
+    //Consume GET service
     it('Consume GET Service with query parameters', () => {
         const query = {
         name: 'John',
@@ -29,6 +31,7 @@ describe('First Api Tests', () => {
         });
     });
 
+    // Cosume POST service
     it('Consume POST Service', () => {
         const body = {
           name: 'John',
@@ -43,6 +46,24 @@ describe('First Api Tests', () => {
             expect(response.status).to.equal(statusCode.OK);
             expect(response.body.json).to.eql(body);
           });
-      });
- 
+    });
+
+    // Consume HEAD service
+    it('Consume HEAD Service', () => {
+        const query = {
+          name: 'John',
+          age: 31,
+          city: 'New York'
+        };
+     
+        return agent
+          .head('https://httpbin.org/headers')
+          .query(query)
+          .then((response) => {
+            expect(response.status).to.equal(statusCode.OK);
+            //returns no body
+            expect(response.body).to.eql({});
+          });
+    });
+
 });
