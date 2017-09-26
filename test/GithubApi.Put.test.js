@@ -3,7 +3,7 @@ const statusCode = require('http-status-codes');
 
 const { expect } = require('chai');
 
-describe.only('Given user login github', () => {
+describe('Given user login github', () => {
   const user = 'aperdomob';
   const urlBase = 'https://api.github.com';
 
