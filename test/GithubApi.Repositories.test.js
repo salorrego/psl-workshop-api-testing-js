@@ -1,11 +1,10 @@
 const agent = require('superagent-promise')(require('superagent'), Promise);
-// const statusCode = require('http-status-codes');
 const chai = require('chai');
 // const md5 = require('md5');
 
 // chai.use(require('chai-subset'));
 
-const { expect } = chai;
+const { expect, assert } = chai;
 
 const urlBase = 'https://api.github.com';
 
@@ -26,6 +25,27 @@ describe('Given a user is logged in GitHub', () => {
       expect(userInfo.name).to.equal('Alejandro Perdomo');
       expect(userInfo.company).to.equal('PSL');
       expect(userInfo.location).to.equal('Colombia');
+    });
+
+    describe(`When GET ${userName} repository`, () => {
+      let repository;
+      const expectedRepository = 'jasmine-awesome-report';
+
+      before(() =>
+        agent.get(userInfo.repos_url)
+          .auth('token', process.env.ACCESS_TOKEN)
+          .then((response) => {
+            repository = response.body.find(repos => repos.name === expectedRepository);
+          }));
+
+      it(`Then ${expectedRepository} should exist`, () => {
+        assert.exists(repository);
+        expect(repository.full_name).to.equal('aperdomob/jasmine-awesome-report');
+        expect(repository.private).to.equal(false);
+        expect(repository.language).to.equal('JavaScript');
+        expect(repository.default_branch).to.equal('development');
+        expect(repository.description).to.equal('An awesome html report for Jasmine');
+      });
     });
   });
 });
