@@ -15,11 +15,14 @@ describe('Consultar información aperdomob', () => {
       expect(response.body.location).to.eql('Colombia');
     }));
 
+  // eslint-disable-next-line
   it('Comprobar repositorio por hypermedia', () => {
-    agent.get('https://api.github.com/users/aperdomob').then((response) => {
-      agent.get(response.body.repos_url).then((reposResponse) => {
-        expect(reposResponse.find(busquedaPorNombre).name).to.eql('jasmine-awesome-report');
+    // eslint-disable-next-line
+    return agent.get('https://api.github.com/users/aperdomob').then((response) => {
+      return agent.get(response.body.repos_url).then((reposResponse) => {
+        expect(reposResponse.body.find(busquedaPorNombre).name).to.eql('jasmine-awesome-reportpp');
       });
     });
   });
 });
+
