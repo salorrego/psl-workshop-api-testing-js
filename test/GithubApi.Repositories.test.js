@@ -30,7 +30,6 @@ describe('Given a user is logged in GitHub', () => {
     describe(`When GET ${userName} repository`, () => {
       let repository;
       const expectedRepository = 'jasmine-awesome-report';
-      const numExpectedMd5 = '81b4fd5281eff143c603bcc8f6f6c84f';
 
       before(() =>
         agent.get(userInfo.repos_url)
@@ -50,6 +49,7 @@ describe('Given a user is logged in GitHub', () => {
 
       describe(`When ${expectedRepository} main branch is downloaded`, () => {
         let zip;
+        const numExpectedMd5 = '81b4fd5281eff143c603bcc8f6f6c84f';
 
         before(() =>
           agent.get(`${repository.svn_url}/zipball/${repository.default_branch}`)
@@ -86,6 +86,7 @@ describe('Given a user is logged in GitHub', () => {
 
         describe('When README.md is downloaded', () => {
           let readmeFile;
+          const numReadmeMd5 = '8a406064ca4738447ec522e639f828bf';
 
           before(() =>
             agent.get(readmeInfo.download_url)
@@ -96,7 +97,7 @@ describe('Given a user is logged in GitHub', () => {
 
           it('Then README file should exist', () => {
             assert.exists(readmeFile);
-            expect(md5(readmeFile)).to.not.equal(numExpectedMd5);
+            expect(md5(readmeFile)).to.equal(numReadmeMd5);
           });
         });
       });
