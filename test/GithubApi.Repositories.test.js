@@ -1,28 +1,31 @@
 const agent = require('superagent-promise')(require('superagent'), Promise);
-const statusCode = require('http-status-codes');
-const { expect } = require('chai');
+// const statusCode = require('http-status-codes');
+const chai = require('chai');
+// const md5 = require('md5');
 
-function busquedaPorNombre(element) {
-  return element.name === 'jasmine-awesome-report';
-}
+// chai.use(require('chai-subset'));
 
-describe('Consultar información aperdomob', () => {
-  it('Comprobar Nombre, Compañía y ubicación', () =>
-    agent.get('https://api.github.com/users/aperdomob').then((response) => {
-      expect(response.status).to.equal(statusCode.OK);
-      expect(response.body.name).to.eql('Alejandro Perdomo');
-      expect(response.body.company).to.eql('PSL');
-      expect(response.body.location).to.eql('Colombia');
-    }));
+const { expect } = chai;
 
-  // eslint-disable-next-line
-  it('Comprobar repositorio por hypermedia', () => {
-    // eslint-disable-next-line
-    return agent.get('https://api.github.com/users/aperdomob').then((response) => {
-      return agent.get(response.body.repos_url).then((reposResponse) => {
-        expect(reposResponse.body.find(busquedaPorNombre).name).to.eql('jasmine-awesome-reportpp');
-      });
+const urlBase = 'https://api.github.com';
+
+describe('Given a user is logged in GitHub', () => {
+  const userName = 'aperdomob';
+
+  describe(`When GET ${userName} information`, () => {
+    let userInfo;
+
+    before(() =>
+      agent.get(`${urlBase}/users/${userName}`)
+        .auth('token', process.env.ACCESS_TOKEN)
+        .then((response) => {
+          userInfo = response.body;
+        }));
+
+    it(`Then ${userName} info should be returned`, () => {
+      expect(userInfo.name).to.equal('Alejandro Perdomo');
+      expect(userInfo.company).to.equal('PSL');
+      expect(userInfo.location).to.equal('Colombia');
     });
   });
 });
-
