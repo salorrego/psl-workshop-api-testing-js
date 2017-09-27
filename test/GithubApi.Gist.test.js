@@ -7,14 +7,14 @@ const { expect, assert } = require('chai');
 chai.use(require('chai-subset'));
 
 const testFile = `
-    function wait(method, time) {
-        return new Promise((resolve) => {
-        setTimeout(resolve(method()), time);
-        });
-  }
+function wait(method, time) {
+    return new Promise((resolve) => {
+      setTimeout(resolve(method()), time);
+    });
+}
 `;
 
-describe.only('Given a user is loged in Github', () => {
+describe('Given a user is loged in Github', () => {
   const urlBase = 'https://api.github.com';
 
   describe('When I try to create a new gist', () => {
@@ -73,16 +73,13 @@ describe.only('Given a user is loged in Github', () => {
         describe('When I try to GET the deleted gist', () => {
           let gistAfterDelete;
 
-          before((done) => {
+          before(() =>
             agent.get(gist.body.url)
               .auth('token', process.env.ACCESS_TOKEN).then((response) => {
                 gistAfterDelete = response;
-                done();
               }).catch((error) => {
                 gistAfterDelete = error;
-                done();
-              });
-          });
+              }));
 
           it('Then I should get NOT FOUND', () => {
             expect(gistAfterDelete.status).to.equal(statusCode.NOT_FOUND);
