@@ -52,7 +52,7 @@ describe('Given user loged in github', () => {
           })));
 
         it('Then I should get the title sent and no body', () => {
-          expect(issueResponse).to.equal(statusCode.CREATED);
+          expect(issueResponse.status).to.equal(statusCode.CREATED);
           expect(issueResponse.body.body).to.equal(null);
           expect(issueResponse.body.title).to.equal(issueQuery.title);
         });
