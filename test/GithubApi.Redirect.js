@@ -28,7 +28,7 @@ describe('Given old and new URL', () => {
           newUrlResponse = response;
         }));
 
-      it.only('Then the response should be 200, OK', () => {
+      it('Then the response should be 200, OK', () => {
         expect(newUrlResponse.status).to.equal(statusCode.OK);
       });
     });
