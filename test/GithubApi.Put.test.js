@@ -3,7 +3,7 @@ const statusCode = require('http-status-codes');
 
 const { expect } = require('chai');
 
-describe('Given user login github', () => {
+describe.only('Given user login github', () => {
   const user = 'aperdomob';
   const urlBase = 'https://api.github.com';
 
@@ -27,7 +27,7 @@ describe('Given user login github', () => {
       before(() => agent.get(`${urlBase}/user/following`)
         .auth('token', process.env.ACCESS_TOKEN)
         .then((response) => {
-          followedUser = response.body.find(uFollowed => uFollowed.login === 'aperdomob');
+          followedUser = response.body.find(uFollowed => uFollowed.login === user);
         }));
 
       it(`Then I should get following ${user}`, () => {
@@ -37,6 +37,7 @@ describe('Given user login github', () => {
       });
     });
   });
+
   describe(`When I want to follow ${user} again`, () => {
     let agentFollowingAgain;
 
@@ -57,7 +58,7 @@ describe('Given user login github', () => {
       before(() => agent.get(`${urlBase}/user/following`)
         .auth('token', process.env.ACCESS_TOKEN)
         .then((response) => {
-          followedUserAgain = response.body.find(uFollowed => uFollowed.login === 'aperdomob');
+          followedUserAgain = response.body.find(uFollowed => uFollowed.login === user);
         }));
 
       it(`Then I should get following ${user} Again`, () => {
