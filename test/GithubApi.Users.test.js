@@ -30,4 +30,42 @@ describe('Given a user loged in giGithub', () => {
         expect(response.body.length).to.equals(30);
       }));
   });
+
+  describe('When I try to get 10 Users only', () => {
+    let usersResponse;
+    const queryToSend = {
+      per_page: 10
+    };
+
+    before(() =>
+      agent.get(`${urlBase}/users`)
+        .auth('token', process.env.ACCESS_TOKEN)
+        .query(queryToSend)
+        .then((response) => {
+          usersResponse = response.body;
+        }));
+
+    it('Then I should get only 10 users', () => {
+      expect(usersResponse.length).to.equal(10);
+    });
+  });
+
+  describe('When I try to get 100 Users', () => {
+    let usersResponse;
+    const queryToSend = {
+      per_page: 100
+    };
+
+    before(() =>
+      agent.get(`${urlBase}/users`)
+        .auth('token', process.env.ACCESS_TOKEN)
+        .query(queryToSend)
+        .then((response) => {
+          usersResponse = response.body;
+        }));
+
+    it('Then I should get 100 users', () => {
+      expect(usersResponse.length).to.equal(100);
+    });
+  });
 });
