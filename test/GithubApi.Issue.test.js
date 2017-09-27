@@ -37,21 +37,45 @@ describe('Given user loged in github', () => {
       });
 
       describe('When I try to create an issue', () => {
-        let issueRequest;
+        let issueResponse;
+        let issueNumber;
         const issueQuery = {
           title: 'testing issue for API testing'
         };
 
-        before(() => {
-          issueRequest = agent.post(`${urlBase}/repos/${user}/${repository.name}/issues`)
-            .auth('token', process.env.ACCESS_TOKEN)
-            .send(issueQuery);
+        before(() => agent.post(`${urlBase}/repos/${user}/${repository.name}/issues`)
+          .auth('token', process.env.ACCESS_TOKEN)
+          .send(issueQuery)
+          .then(((response) => {
+            issueNumber = response.body.number;
+            issueResponse = response;
+          })));
+
+        it('Then I should get the title sent and no body', () => {
+          expect(issueResponse).to.equal(statusCode.CREATED);
+          expect(issueResponse.body.body).to.equal(null);
+          expect(issueResponse.body.title).to.equal(issueQuery.title);
         });
 
-        it('Then I should get the title sent and no body', () => issueRequest.then((response) => {
-          expect(response.status).to.equal(statusCode.CREATED);
-          expect(response.body.body).to.equal(null);
-        }));
+        describe('When I edit body issue', () => {
+          let patchResponse;
+          const issueQueryPatch = {
+            body: `Body changed of issue ${issueNumber}`
+          };
+
+          before(() => agent.patch(`${urlBase}/repos/${user}/${repository.name}/issues/${issueNumber}`)
+            .auth('token', process.env.ACCESS_TOKEN)
+            .send(issueQueryPatch)
+            .then((response) => {
+              patchResponse = response;
+            }));
+
+          it(`Then issue should return number: ${issueNumber} and body sent`, () => {
+            expect(patchResponse.status).to.equal(statusCode.OK);
+            expect(patchResponse.body.body).to.equal(issueQueryPatch.body);
+            expect(patchResponse.body.title).to.equal(issueQuery.title);
+          });
+        });
       });
     });
   });
