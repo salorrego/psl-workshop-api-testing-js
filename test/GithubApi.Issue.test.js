@@ -1,4 +1,5 @@
 const agent = require('superagent-promise')(require('superagent'), Promise);
+const statusCode = require('http-status-codes');
 
 const { expect, assert } = require('chai');
 
@@ -33,6 +34,24 @@ describe('Given user loged in github', () => {
       it('Then there must be at least one repository', () => {
         assert.exists(repository);
         expect(repository).to.has.property('id');
+      });
+
+      describe('When I try to create an issue', () => {
+        let issueRequest;
+        const issueQuery = {
+          title: 'testing issue for API testing'
+        };
+
+        before(() => {
+          issueRequest = agent.post(`${urlBase}/repos/${user}/${repository.name}/issues`)
+            .auth('token', process.env.ACCESS_TOKEN)
+            .send(issueQuery);
+        });
+
+        it('Then I should get the title sent and no body', () => issueRequest.then((response) => {
+          expect(response.status).to.equal(statusCode.CREATED);
+          expect(response.body.body).to.equal(null);
+        }));
       });
     });
   });
