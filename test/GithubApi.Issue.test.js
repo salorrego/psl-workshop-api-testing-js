@@ -1,6 +1,6 @@
 const agent = require('superagent-promise')(require('superagent'), Promise);
 
-const { expect } = require('chai');
+const { expect, assert } = require('chai');
 
 describe('Given user loged in github', () => {
   const user = 'salorrego';
@@ -15,8 +15,25 @@ describe('Given user loged in github', () => {
         userInfo = response.body;
       }));
 
-    it.only('Then the user should have at least one repository', () => {
+    it('Then the user should have at least one repository', () => {
       expect(userInfo.public_repos).to.be.greaterThan(0);
+    });
+
+    describe(`When I look at the repositories of ${user}`, () => {
+      let repositories;
+      let repository;
+
+      before(() => agent.get(userInfo.repos_url)
+        .auth('token', process.env.ACCESS_TOKEN)
+        .then((response) => {
+          repositories = response.body;
+          [repository] = repositories;
+        }));
+
+      it('Then there must be at least one repository', () => {
+        assert.exists(repository);
+        expect(repository).to.has.property('id');
+      });
     });
   });
 });
