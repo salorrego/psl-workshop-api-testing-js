@@ -5,8 +5,7 @@ const listPublicEventsSchema = {
     properties: {
         status: {
             type: 'number',
-            minimum: 100,
-            maximum: 599
+            enum: [200]
         },
         body: {
             type: 'array',
@@ -14,7 +13,7 @@ const listPublicEventsSchema = {
                 type: 'object',
                 properties: {
                     id: {type: 'string'},
-                    type: {type: 'string'},
+                    type: ['IssueCommentEvent','PushEvent','PullRequestEvent','WatchEvent','CreateEvent'],
                     actor: { 
                         type: 'object',
                         properties: {
