@@ -8,7 +8,7 @@ chai.use(require('chai-json-schema'));
 
 const urlBase = 'https://api.github.com';
 
-describe('Given event Github API resources', () => {
+describe.only('Given event Github API resources', () => {
   describe('When wanna verify the List public events', () => {
     let listPublicEventsQuery;
 
