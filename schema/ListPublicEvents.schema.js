@@ -22,10 +22,11 @@ const listPublicEventsSchema = {
                             login: {type:'string'},
                             display_login: {type:'string'},
                             gravatar_id: {type:'string'},
-                            url: {type:'dtring'},
+                            url: {type:'string'},
                             avatar_url: {type:'string'}
                         }
                     },
+                    public: {type: 'boolean'},
                     repo: {
                         type: 'object',
                         properties: {
